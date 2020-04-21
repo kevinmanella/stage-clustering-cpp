@@ -1,0 +1,110 @@
+#include "sample.h"
+#include <iostream>
+#include <fstream>
+#include <sstream>
+
+// Funzione che, dato il percorso di un file .csv, restituisce un vector di samples, creato leggendo il file
+std::vector <sample> buildSamplesFromCSV(std::string filePath)
+{
+	std::ifstream inFile;
+	inFile.open(filePath);
+
+	// Gestione degli errori per il file
+	if(!inFile)
+	{
+		std::cout<<"Non è possibile aprire il file in lettura"<<std::endl;
+		exit(1);
+	}
+
+	// Lettura della prima riga del file
+	std::string firstLine;
+	inFile>>firstLine;
+	std::istringstream ss(firstLine);
+	std::string token;
+	std::vector <std::string> cellNames;	// Conterrà i nomi dei samples
+
+	while(std::getline(ss,token,','))
+	{
+		cellNames.push_back(token);	// Inserisco i nomi dei samples
+	}
+
+	cellNames.erase(cellNames.begin());	// Cancello "GENES", in quanto è intestazione del file e non il nome di un sample vero e proprio
+
+	const int size=cellNames.size();	// Rappresenta il numero di samples che vi sono nel file
+	
+	std::vector <sample> samples;
+
+	for(int i=0;i<size;i++)
+	{
+		sample s;
+		s.id=i;
+		s.name=cellNames[i];
+		samples.push_back(s);	// Inserisco i vari samples nel vector samples
+	}
+
+	// Lettura di tutte le altre righe del file
+	std::string line;
+
+	while(inFile>>line)
+	{
+		std::istringstream ss2(line);
+		
+		std::vector <std::string> lineVector;	// Conterrà di volta in volta le varie righe del file
+
+		while(std::getline(ss2,token,','))
+		{
+			lineVector.push_back(token);	// Inserisco i RPKM
+		}
+
+		std::string geneName=lineVector[0];	// All'inizio di ogni riga c'è il nome del gene, lo salvo
+		lineVector.erase(lineVector.begin());	// Cancello il nome del gene, in quanto è intestazione del file e non un RPKM
+
+		// Salvo i RPKM in genesExpression e inserisco i dati in mapExpression
+		for(int i=0;i<size;i++)
+		{
+			samples[i].genesExpression.push_back(std::stod(lineVector[i]));
+			samples[i].mapExpression[geneName]=std::stod(lineVector[i]);
+		}
+	}
+
+	inFile.close();
+	return samples;
+}
+
+// Funzione che, dato il percorso di un file .csv, restituisce un dizionario che ha come chiave il nome del sample e come valore l'ID del sample
+std::map<std::string, int> buildNameToIndexFromCSV(std::string filePath)
+{
+	std::ifstream inFile;
+	inFile.open(filePath);
+
+	// Gestione degli errori per il file
+	if(!inFile)
+	{
+		std::cout<<"Non è possibile aprire il file in lettura"<<std::endl;
+		exit(1);
+	}
+
+	// Lettura della prima riga del file
+	std::string firstLine;
+	inFile>>firstLine;
+	std::istringstream ss(firstLine);
+	std::string token;
+	std::vector <std::string> cellNames;	// Conterrà i nomi dei samples
+
+	while(std::getline(ss,token,','))
+	{
+		cellNames.push_back(token);	// Inserisco i nomi dei samples
+	}
+
+	cellNames.erase(cellNames.begin());	// Cancello "GENES", in quanto è intestazione del file e non il nome di un sample vero e proprio
+
+	std::map<std::string, int> nameToIndex;
+
+	for(int i=0;i<cellNames.size();i++)
+	{
+		nameToIndex[cellNames[i]]=i;
+	}
+
+	inFile.close();
+	return nameToIndex;
+}
