@@ -1,4 +1,4 @@
-#include "sample.h"
+#include "scs.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
