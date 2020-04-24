@@ -1,4 +1,4 @@
-// Contiene lo struct sample e la dichiarazione della funzione getMedian
+// Contiene lo struct sample e la dichiarazione delle funzioni getMedian e buildExpressedSet2
 #ifndef SCS_H
 #define SCS_H
 
@@ -24,5 +24,7 @@ struct sample
 // set_union(s1.begin(),s1.end(),s2.begin(),s2.end(),std::inserter(s3,s3.begin()));
 
 double getMedian(std::vector <double> values);
+
+void buildExpressedSet2(sample &s, double p);
 
 #endif
