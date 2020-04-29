@@ -11,9 +11,9 @@ struct sample
 {
 	int id;
 	std::string name;
-	std::map <std::string, double> mapExpression;	// Chiave: Nome del gene. Valore: RPKM del gene rispetto al sample
-	std::vector <double> genesExpression;	// Tutti gli RPKM relativi al sample
-	std::set <int> mostExpressed;	// Insieme che contiene gli indici dei geni più espressi
+	std::map<std::string,double> mapExpression;	// Chiave: Nome del gene. Valore: RPKM del gene rispetto al sample
+	std::vector<double> genesExpression;	// Tutti gli RPKM relativi al sample
+	std::set<int> mostExpressed;	// Insieme che contiene gli indici dei geni più espressi
 };
 
 // Per intersezione ed unione serve #include <algorithm>
@@ -23,10 +23,10 @@ struct sample
 // Codice per unione fra 2 set
 // set_union(s1.begin(),s1.end(),s2.begin(),s2.end(),std::inserter(s3,s3.begin()));
 
-double getMedian(std::vector <double> values);
+double getMedian(std::vector<double> values);
 
-void buildExpressedSet(sample &s, double p);
+void buildExpressedSet(sample &s,double p);
 
-void buildExpressedSet2(sample &s, double p);
+void buildExpressedSet2(sample &s,double p);
 
 #endif

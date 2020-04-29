@@ -2,18 +2,16 @@
 #include <bits/stdc++.h>
 
 // Funzione che, dato un vector di double, ne restituisce la mediana
-double getMedian(std::vector <double> values)
+double getMedian(std::vector<double> values)
 {
-	std::vector <double> tmp=values;
+	std::vector<double> tmp=values;
 
-	std::vector <double>::iterator it=tmp.begin();
+	std::vector<double>::iterator it=tmp.begin();
 	while(it!=tmp.end())
-	{
 		if(*it==0)
 			it=tmp.erase(it);
 		else
 			it++;
-	}
 
 	sort(tmp.begin(),tmp.end());
 
@@ -26,16 +24,16 @@ double getMedian(std::vector <double> values)
 }
 
 // Funzione che, dati un sample e un double, costruisce l'insieme dei migliori p% geni espressi (escludendo gli zeri)
-void buildExpressedSet(sample &s, double p)
+void buildExpressedSet(sample &s,double p)
 {
-	std::multimap <double, int> tmp;
-	for(std::vector <double>::iterator it=s.genesExpression.begin();
-		it!=s.genesExpression.end();it++)
-			tmp.insert(std::make_pair(*it, it-s.genesExpression.begin()));
+	std::multimap<double,int> tmp;
 
-	std::vector <int> indexes;
+	for(std::vector<double>::iterator it=s.genesExpression.begin();it!=s.genesExpression.end();it++)
+		tmp.insert(std::make_pair(*it,it-s.genesExpression.begin()));
 
-	for(std::multimap <double, int>::iterator it=tmp.begin();it!=tmp.end();it++)
+	std::vector<int> indexes;
+
+	for(std::multimap<double,int>::iterator it=tmp.begin();it!=tmp.end();it++)
 		indexes.push_back(it->second);
 
 	int topp=int(indexes.size()*p);
@@ -45,7 +43,7 @@ void buildExpressedSet(sample &s, double p)
 }
 
 // Funzione che, dati un sample e un double, costruisce l'insieme di geni che sono p volte più espressi rispetto alla mediana (escludendo gli zeri)
-void buildExpressedSet2(sample &s, double p)
+void buildExpressedSet2(sample &s,double p)
 {
 	double median=getMedian(s.genesExpression);
 	int i=0;
@@ -53,8 +51,7 @@ void buildExpressedSet2(sample &s, double p)
 	while(s.mostExpressed.size()<=10)
 	{
 		i=0;
-		for(std::vector <double>::iterator it=s.genesExpression.begin();
-			it!=s.genesExpression.end();it++)
+		for(std::vector<double>::iterator it=s.genesExpression.begin();it!=s.genesExpression.end();it++)
 		{
 			if(*it>p*median)
 				s.mostExpressed.insert(i);
