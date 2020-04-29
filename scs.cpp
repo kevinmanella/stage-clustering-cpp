@@ -25,6 +25,25 @@ double getMedian(std::vector <double> values)
 	return tmp[middle];
 }
 
+// Funzione che, dati un sample e un double, costruisce l'insieme dei migliori p% geni espressi (escludendo gli zeri)
+void buildExpressedSet(sample &s, double p)
+{
+	std::multimap <double, int> tmp;
+	for(std::vector <double>::iterator it=s.genesExpression.begin();
+		it!=s.genesExpression.end();it++)
+			tmp.insert(std::make_pair(*it, it-s.genesExpression.begin()));
+
+	std::vector <int> indexes;
+
+	for(std::multimap <double, int>::iterator it=tmp.begin();it!=tmp.end();it++)
+		indexes.push_back(it->second);
+
+	int topp=int(indexes.size()*p);
+
+	for(int i=1;i<=topp;i++)
+		s.mostExpressed.insert(indexes[indexes.size()-i]);
+}
+
 // Funzione che, dati un sample e un double, costruisce l'insieme di geni che sono p volte più espressi rispetto alla mediana (escludendo gli zeri)
 void buildExpressedSet2(sample &s, double p)
 {
@@ -34,7 +53,7 @@ void buildExpressedSet2(sample &s, double p)
 	while(s.mostExpressed.size()<=10)
 	{
 		i=0;
-		for(std::vector<double>::iterator it=s.genesExpression.begin();
+		for(std::vector <double>::iterator it=s.genesExpression.begin();
 			it!=s.genesExpression.end();it++)
 		{
 			if(*it>p*median)

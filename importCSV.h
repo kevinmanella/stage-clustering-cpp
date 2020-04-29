@@ -4,6 +4,6 @@
 
 std::vector <sample> buildSamplesFromCSV(std::string filePath);
 
-std::map<std::string, int> buildNameToIndexFromCSV(std::string filePath);
+std::map <std::string, int> buildNameToIndexFromCSV(std::string filePath);
 
 #endif

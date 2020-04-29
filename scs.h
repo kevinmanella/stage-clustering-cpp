@@ -1,4 +1,4 @@
-// Contiene lo struct sample e la dichiarazione delle funzioni getMedian e buildExpressedSet2
+// Contiene lo struct sample e la dichiarazione delle funzioni getMedian, buildExpressedSet e buildExpressedSet2
 #ifndef SCS_H
 #define SCS_H
 
@@ -11,9 +11,9 @@ struct sample
 {
 	int id;
 	std::string name;
-	std::map<std::string, double> mapExpression;	// Chiave: Nome del gene. Valore: RPKM del gene rispetto al sample
+	std::map <std::string, double> mapExpression;	// Chiave: Nome del gene. Valore: RPKM del gene rispetto al sample
 	std::vector <double> genesExpression;	// Tutti gli RPKM relativi al sample
-	std::set<int> mostExpressed;	// Insieme che contiene gli indici dei geni più espressi
+	std::set <int> mostExpressed;	// Insieme che contiene gli indici dei geni più espressi
 };
 
 // Per intersezione ed unione serve #include <algorithm>
@@ -24,6 +24,8 @@ struct sample
 // set_union(s1.begin(),s1.end(),s2.begin(),s2.end(),std::inserter(s3,s3.begin()));
 
 double getMedian(std::vector <double> values);
+
+void buildExpressedSet(sample &s, double p);
 
 void buildExpressedSet2(sample &s, double p);
 

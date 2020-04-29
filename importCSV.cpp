@@ -72,7 +72,7 @@ std::vector <sample> buildSamplesFromCSV(std::string filePath)
 }
 
 // Funzione che, dato il percorso di un file .csv, restituisce un dizionario che ha come chiave il nome del sample e come valore l'ID del sample
-std::map<std::string, int> buildNameToIndexFromCSV(std::string filePath)
+std::map <std::string, int> buildNameToIndexFromCSV(std::string filePath)
 {
 	std::ifstream inFile;
 	inFile.open(filePath);
@@ -98,7 +98,7 @@ std::map<std::string, int> buildNameToIndexFromCSV(std::string filePath)
 
 	cellNames.erase(cellNames.begin());	// Cancello "GENES", in quanto è intestazione del file e non il nome di un sample vero e proprio
 
-	std::map<std::string, int> nameToIndex;
+	std::map <std::string, int> nameToIndex;
 
 	for(int i=0;i<cellNames.size();i++)
 	{
