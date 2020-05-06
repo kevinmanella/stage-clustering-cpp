@@ -6,7 +6,7 @@
 #include <vector>
 #include <set>
 
-// Sample è lo struct rappresentante una cellula
+// sample è lo struct rappresentante una cellula
 struct sample
 {
 	int id;
