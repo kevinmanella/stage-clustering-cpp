@@ -1,5 +1,5 @@
-main.exe: main.o importCSV.o scs.o cluster.o
-	g++ main.o importCSV.o scs.o cluster.o -o main.exe
+main.exe: main.o importCSV.o scs.o cluster.o measures.o
+	g++ main.o importCSV.o scs.o cluster.o measures.o -o main.exe
 
 main.o: main.cpp
 	g++ -c -std=c++0x main.cpp
@@ -12,6 +12,9 @@ scs.o: scs.cpp
 
 cluster.o: cluster.cpp
 	g++ -c -std=c++0x cluster.cpp
+
+measures.o: measures.cpp
+	g++ -c -std=c++0x measures.cpp
 
 .PHONY: clean
 

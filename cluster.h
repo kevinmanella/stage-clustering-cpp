@@ -19,10 +19,10 @@ struct cluster
 	std::vector<std::string> splittedWith;
 };
 
-cluster newCluster(std::vector<sample> cells,std::vector<int> indices);
+cluster* newCluster(std::vector<sample> cells,std::vector<int> indices);
 
-std::string string(cluster c);
+std::string string(cluster* c);
 
-int len(cluster c);
+int len(cluster* c);
 
 #endif
