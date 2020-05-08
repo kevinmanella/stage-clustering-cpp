@@ -2,6 +2,11 @@
 #include <cmath>
 #include <algorithm>
 
+std::string string(retScore* r)
+{
+	return "("+std::to_string(r->i)+", "+std::to_string(r->j)+") "+std::to_string(r->score);
+}
+
 retScore* cosineSimilarity(std::vector<double> x,std::vector<double> y,int xi,int yi)
 {
 	retScore* ret=new retScore();
@@ -29,6 +34,7 @@ retScore* cosineSimilarity(std::vector<double> x,std::vector<double> y,int xi,in
 retScore* avgCosine(cluster* c1,cluster* c2,int ci,int cj)
 {
 	retScore* ret=new retScore();
+	retScore* tmp=nullptr;
 	double denom=0.0;
 	double avg=0.0;
 	double score=0.0;
@@ -50,7 +56,10 @@ retScore* avgCosine(cluster* c1,cluster* c2,int ci,int cj)
 			else
 				ge2=c2->elements[j-n].genesExpression;
 
-			score=cosineSimilarity(ge1,ge2,i,j)->score;
+			tmp=cosineSimilarity(ge1,ge2,i,j);
+			score=tmp->score;
+			delete tmp;
+			tmp=nullptr;
 			avg+=score;
 			denom++;
 		}
@@ -100,4 +109,52 @@ retScore* avgGenes(cluster* c1,cluster* c2,int ci,int cj)
 		ret->score=avg/denom;
 
 		return ret;
+}
+
+retScore* euclideanSimilarity(std::vector<double> x,std::vector<double> y,int xi,int yi)
+{
+	retScore* ret=new retScore();
+	double sum=0.0;
+
+	for(int i=0;i<x.size();i++)
+		sum+=pow(x[i]-y[i],2);
+
+	ret->i=xi;
+	ret->j=yi;
+	ret->score=-sqrt(sum);
+
+	return ret;
+}
+
+retScore* minkowskiSimilarity(std::vector<double> x,std::vector<double> y,int xi,int yi)
+{
+	retScore* ret=new retScore();
+	double p=3.0;
+	double sum=0.0;
+
+	for(int i=0;i<x.size();i++)
+		sum+=pow(std::abs(x[i]-y[i]),p);
+
+	ret->i=xi;
+	ret->j=yi;
+	ret->score=-pow(sum,1.0/p);
+
+	return ret;
+}
+
+retScore* geneExpressed(std::vector<double> x,std::vector<double> y,int xi,int yi)
+{
+	retScore* ret=new retScore();
+	double p=200.0;
+	double sum=0.0;
+
+	for(int i=0;i<x.size();i++)
+		if(std::abs(x[i]-y[i])<=p)
+			sum++;
+
+	ret->i=xi;
+	ret->j=yi;
+	ret->score=sum/x.size();
+
+	return ret;
 }
