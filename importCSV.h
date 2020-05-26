@@ -1,6 +1,8 @@
 #ifndef IMPORTCSV_H
 #define IMPORTCSV_H
 
+#include "scs.h"
+
 /**
 	@file importCSV.h
 
@@ -16,7 +18,7 @@
 
 	@return Vector di samples
 **/
-std::vector<sample> buildSamplesFromCSV(std::string filePath);
+std::vector<sample> buildSamplesFromCSV(std::string &filePath);
 
 /**
 	@brief Funzione buildNameToIndexFromCSV
@@ -27,6 +29,6 @@ std::vector<sample> buildSamplesFromCSV(std::string filePath);
 
 	@return Map che ha come chiave il nome del sample e come valore l'ID del sample
 **/
-std::map<std::string,int> buildNameToIndexFromCSV(std::string filePath);
+std::map<std::string,int> buildNameToIndexFromCSV(std::string &filePath);
 
 #endif

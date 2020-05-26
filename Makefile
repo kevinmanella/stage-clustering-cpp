@@ -1,23 +1,28 @@
-main.exe: main.o scs.o importCSV.o cluster.o measures.o
-	g++ main.o scs.o importCSV.o cluster.o measures.o -o main.exe
+main.exe: main.o scs.o importCSV.o cluster.o measures.o vectorOperations.o stat.o
+	g++ main.o scs.o importCSV.o cluster.o measures.o vectorOperations.o stat.o -fopenmp -o main.exe
 
 main.o: main.cpp
-	g++ -c -std=c++17 main.cpp
+	g++ -c -std=c++17 -fopenmp main.cpp
 
 scs.o: scs.cpp
-	g++ -c -std=c++17 scs.cpp
+	g++ -c -std=c++17 -fopenmp scs.cpp
 
 importCSV.o: importCSV.cpp
-	g++ -c -std=c++17 importCSV.cpp
+	g++ -c -std=c++17 -fopenmp importCSV.cpp
 
 cluster.o: cluster.cpp
-	g++ -c -std=c++17 cluster.cpp
+	g++ -c -std=c++17 -fopenmp cluster.cpp
 
 measures.o: measures.cpp
-	g++ -c -std=c++17 measures.cpp
+	g++ -c -std=c++17 -fopenmp measures.cpp
+
+vectorOperations.o: vectorOperations.cpp
+	g++ -c -std=c++17 -fopenmp vectorOperations.cpp
+
+stat.o: stat.cpp
+	g++ -c -std=c++17 -fopenmp stat.cpp
 
 .PHONY: clean
 
 clean:
 	rm *.exe *.o
-# 0x

@@ -110,7 +110,7 @@ public:
 
 		@param id ID del cluster da settare
 	**/
-	void setId(std::string id);
+	void setId(std::string &id);
 
 	/**
 		@brief Metodo setElements
@@ -119,7 +119,7 @@ public:
 
 		@param elements Elements del cluster da settare
 	**/
-	void setElements(std::vector<sample> elements);
+	void setElements(std::vector<sample> &elements);
 
 	/**
 		@brief Metodo setIndices
@@ -128,7 +128,7 @@ public:
 
 		@param indices Indici del cluster da settare
 	**/
-	void setIndices(std::vector<int> indices);
+	void setIndices(std::vector<int> &indices);
 
 	/**
 		@brief Metodo setRhn
@@ -137,7 +137,7 @@ public:
 
 		@param rhn RHN del cluster da settare
 	**/
-	void setRhn(std::map<int,std::vector<double>> rhn);
+	void setRhn(std::map<int,std::vector<double>> &rhn);
 
 	/**
 		@brief Metodo setTm
@@ -146,7 +146,7 @@ public:
 
 		@param tm TM del cluster da settare
 	**/
-	void setTm(double tm);
+	void setTm(double &tm);
 
 	/**
 		@brief Metodo setIntraSim
@@ -155,7 +155,7 @@ public:
 
 		@param intraSim IntraSim del cluster da settare
 	**/
-	void setIntraSim(double intraSim);
+	void setIntraSim(double &intraSim);
 
 	/**
 		@brief Metodo setIntraScore
@@ -164,7 +164,7 @@ public:
 
 		@param intraScore IntraScore del cluster da settare
 	**/
-	void setIntraScore(std::multimap<double,int> intraScore);
+	void setIntraScore(std::multimap<double,int> &intraScore);
 
 	/**
 		@brief Metodo setSplittedWith
@@ -173,7 +173,7 @@ public:
 
 		@param splittedWith SplittedWith del cluster da settare
 	**/
-	void setSplittedWith(std::set<std::string> splittedWith);
+	void setSplittedWith(std::set<std::string> &splittedWith);
 
 	// Metodi per inserire i dati
 
@@ -184,7 +184,7 @@ public:
 
 		@param element Sample da inserire negli elements del cluster
 	**/
-	void insertDataIntoElements(sample element);
+	void insertDataIntoElements(sample &element);
 
 	/**
 		@brief Metodo insertDataIntoIndices
@@ -193,7 +193,7 @@ public:
 
 		@param index Indice da inserire negli indici del cluster
 	**/
-	void insertDataIntoIndices(int index);
+	void insertDataIntoIndices(int &index);
 
 	/**
 		@brief Metodo insertDataIntoRhn
@@ -203,7 +203,7 @@ public:
 		@param i Valore intero
 		@param d Vector di double
 	**/
-	void insertDataIntoRhn(int i,std::vector<double> d);
+	void insertDataIntoRhn(int i,std::vector<double> &d);
 
 	/**
 		@brief Metodo insertDataIntoIntraScore
@@ -213,7 +213,7 @@ public:
 		@param d Valore double
 		@param i Valore intero
 	**/
-	void insertDataIntoIntraScore(double d,int i);
+	void insertDataIntoIntraScore(double &d,int &i);
 
 	/**
 		@brief Metodo insertDataIntoSplittedWith
@@ -222,7 +222,7 @@ public:
 
 		@param s Stringa da inserire nello SplittedWith del cluster
 	**/
-	void insertDataIntoSplittedWith(std::string s);
+	void insertDataIntoSplittedWith(std::string &s);
 
 	// Altri metodi
 
@@ -244,7 +244,7 @@ public:
 		@return Numero di elements presenti nel cluster
 	**/
 	int len() const;
-}; // Fine classe cluster
+};	// Fine classe cluster
 
 // Funzioni globali
 

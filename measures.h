@@ -60,7 +60,7 @@ public:
 
 		@param i i del retScore da settare
 	**/
-	void setI(int i);
+	void setI(int &i);
 
 	/**
 		@brief Metodo setJ
@@ -69,7 +69,7 @@ public:
 
 		@param j j del retScore da settare
 	**/
-	void setJ(int j);
+	void setJ(int &j);
 
 	/**
 		@brief Metodo setScore
@@ -78,7 +78,7 @@ public:
 
 		@param score score del retScore da settare
 	**/
-	void setScore(double score);
+	void setScore(double &score);
 
 	// Altri metodi
 
@@ -99,19 +99,19 @@ public:
 
 	Puntatore a funzione che ha 2 vector di double e 2 interi come parametri e che ritorna un puntatore a retScore
 **/
-typedef retScore* (*similarityFunction) (std::vector<double> x,std::vector<double> y,int xi,int yi);
+typedef retScore* (*similarityFunction) (std::vector<double> &x,std::vector<double> &y,int &xi,int &yi);
 
 /**
 	@brief clusterSimilarityFunction
 
 	Puntatore a funzione che ha 2 puntatori a cluster e 2 interi come parametri e che ritorna un puntatore a retScore
 **/
-typedef retScore* (*clusterSimilarityFunction) (cluster* c1,cluster* c2,int ci,int cj);
+typedef retScore* (*clusterSimilarityFunction) (cluster* c1,cluster* c2,int &ci,int &cj);
 
 // Funzioni globali
 
 /**
-	@brief cosineSimilarity
+	@brief Funzione cosineSimilarity
 
 	È compatibile con similarityFunction
 	https://en.wikipedia.org/wiki/Cosine_similarity
@@ -123,10 +123,10 @@ typedef retScore* (*clusterSimilarityFunction) (cluster* c1,cluster* c2,int ci,i
 
 	@return Puntatore a retScore
 **/
-retScore* cosineSimilarity(std::vector<double> x,std::vector<double> y,int xi,int yi);
+retScore* cosineSimilarity(std::vector<double> &x,std::vector<double> &y,int &xi,int &yi);
 
 /**
-	@brief euclideanSimilarity
+	@brief Funzione euclideanSimilarity
 
 	È compatibile con similarityFunction
 	https://en.wikipedia.org/wiki/Euclidean_distance
@@ -138,10 +138,10 @@ retScore* cosineSimilarity(std::vector<double> x,std::vector<double> y,int xi,in
 
 	@return Puntatore a retScore
 **/
-retScore* euclideanSimilarity(std::vector<double> x,std::vector<double> y,int xi,int yi);
+retScore* euclideanSimilarity(std::vector<double> &x,std::vector<double> &y,int &xi,int &yi);
 
 /**
-	@brief minkowskiSimilarity
+	@brief Funzione minkowskiSimilarity
 
 	È compatibile con similarityFunction
 	https://en.wikipedia.org/wiki/Minkowski_distance
@@ -153,10 +153,10 @@ retScore* euclideanSimilarity(std::vector<double> x,std::vector<double> y,int xi
 
 	@return Puntatore a retScore
 **/
-retScore* minkowskiSimilarity(std::vector<double> x,std::vector<double> y,int xi,int yi);
+retScore* minkowskiSimilarity(std::vector<double> &x,std::vector<double> &y,int &xi,int &yi);
 
 /**
-	@brief geneExpressed
+	@brief Funzione geneExpressed
 
 	È compatibile con similarityFunction
 
@@ -167,10 +167,10 @@ retScore* minkowskiSimilarity(std::vector<double> x,std::vector<double> y,int xi
 
 	@return Puntatore a retScore
 **/
-retScore* geneExpressed(std::vector<double> x,std::vector<double> y,int xi,int yi);
+retScore* geneExpressed(std::vector<double> &x,std::vector<double> &y,int &xi,int &yi);
 
 /**
-	@brief avgCosine
+	@brief Funzione avgCosine
 
 	È compatibile con clusterSimilarityFunction
 
@@ -181,10 +181,10 @@ retScore* geneExpressed(std::vector<double> x,std::vector<double> y,int xi,int y
 
 	@return Puntatore a retScore
 **/
-retScore* avgCosine(cluster* c1,cluster* c2,int ci,int cj);
+retScore* avgCosine(cluster* c1,cluster* c2,int &ci,int &cj);
 
 /**
-	@brief avgGenes
+	@brief Funzione avgGenes
 
 	È compatibile con clusterSimilarityFunction
 
@@ -195,10 +195,10 @@ retScore* avgCosine(cluster* c1,cluster* c2,int ci,int cj);
 
 	@return Puntatore a retScore
 **/
-retScore* avgGenes(cluster* c1,cluster* c2,int ci,int cj);
+retScore* avgGenes(cluster* c1,cluster* c2,int &ci,int &cj);
 
 /**
-	@brief intraSimilarity
+	@brief Funzione intraSimilarity
 
 	intraSimilarity
 
@@ -210,7 +210,7 @@ retScore* avgGenes(cluster* c1,cluster* c2,int ci,int cj);
 std::tuple<double,std::multimap<double,int>> intraSimilarity(cluster* c,similarityFunction sim);
 
 /**
-	@brief intraDistance
+	@brief Funzione intraDistance
 
 	intraDistance
 
@@ -221,7 +221,7 @@ std::tuple<double,std::multimap<double,int>> intraSimilarity(cluster* c,similari
 std::tuple<double,std::multimap<double,int>> intraDistance(cluster* c);
 
 /**
-	@brief newCluster
+	@brief Funzione newCluster
 
 	Crea un nuovo cluster
 
@@ -230,10 +230,10 @@ std::tuple<double,std::multimap<double,int>> intraDistance(cluster* c);
 
 	@return Puntatore a cluster
 **/
-cluster* newCluster(std::vector<sample> cells,std::vector<int> indices);
+cluster* newCluster(std::vector<sample> &cells,std::vector<int> &indices);
 
 /**
-	@brief splitCluster
+	@brief Funzione splitCluster
 
 	Splitta un cluster in due nuovi cluster
 
@@ -244,10 +244,10 @@ cluster* newCluster(std::vector<sample> cells,std::vector<int> indices);
 
 	@return 2 puntatori a cluster
 **/
-std::tuple<cluster*,cluster*> splitCluster(cluster* c,std::vector<sample> cells,std::vector<int> ix,std::vector<int> jx);
+std::tuple<cluster*,cluster*> splitCluster(cluster* c,std::vector<sample> &cells,std::vector<int> &ix,std::vector<int> &jx);
 
 /**
-	@brief fuseCluster
+	@brief Funzione fuseCluster
 
 	Fonde due cluster in un nuovo cluster
 
@@ -259,6 +259,6 @@ std::tuple<cluster*,cluster*> splitCluster(cluster* c,std::vector<sample> cells,
 
 	@return Puntatore a cluster
 **/
-cluster* fuseCluster(cluster* c1,cluster* c2,std::vector<sample> cells,std::map<int,std::vector<double>> rhn,double tm);
+cluster* fuseCluster(cluster* c1,cluster* c2,std::vector<sample> &cells,std::map<int,std::vector<double>> &rhn,double &tm);
 
 #endif

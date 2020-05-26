@@ -78,7 +78,7 @@ const std::set<int>& sample::getMostExpressed() const
 
 	@param id ID del sample da settare
 **/
-void sample::setId(int id)
+void sample::setId(int &id)
 {
 	this->id=id;
 }
@@ -90,7 +90,7 @@ void sample::setId(int id)
 
 	@param name Nome del sample da settare
 **/
-void sample::setName(std::string name)
+void sample::setName(std::string &name)
 {
 	this->name=name;
 }
@@ -102,7 +102,7 @@ void sample::setName(std::string name)
 
 	@param mapExpression MapExpression del sample da settare
 **/
-void sample::setMapExpression(std::map<std::string,double> mapExpression)
+void sample::setMapExpression(std::map<std::string,double> &mapExpression)
 {
 	this->mapExpression=mapExpression;
 }
@@ -114,7 +114,7 @@ void sample::setMapExpression(std::map<std::string,double> mapExpression)
 
 	@param genesExpression GenesExpression del sample da settare
 **/
-void sample::setGenesExpression(std::vector<double> genesExpression)
+void sample::setGenesExpression(std::vector<double> &genesExpression)
 {
 	this->genesExpression=genesExpression;
 }
@@ -126,7 +126,7 @@ void sample::setGenesExpression(std::vector<double> genesExpression)
 
 	@param mostExpressed MostExpressed del sample da settare
 **/
-void sample::setMostExpressed(std::set<int> mostExpressed)
+void sample::setMostExpressed(std::set<int> &mostExpressed)
 {
 	this->mostExpressed=mostExpressed;
 }
@@ -141,7 +141,7 @@ void sample::setMostExpressed(std::set<int> mostExpressed)
 	@param geneName Nome del gene
 	@param rpkm RPKM del gene rispetto al sample
 **/
-void sample::insertDataIntoMapExpression(std::string geneName,double rpkm)
+void sample::insertDataIntoMapExpression(std::string &geneName,double &rpkm)
 {
 	this->mapExpression[geneName]=rpkm;
 }
@@ -153,7 +153,7 @@ void sample::insertDataIntoMapExpression(std::string geneName,double rpkm)
 
 	@param rpkm RPKM relativo al sample (indipendentemente dal gene associato)
 **/
-void sample::insertDataIntoGenesExpression(double rpkm)
+void sample::insertDataIntoGenesExpression(double &rpkm)
 {
 	this->genesExpression.push_back(rpkm);
 }
@@ -165,7 +165,7 @@ void sample::insertDataIntoGenesExpression(double rpkm)
 
 	@param index Indice del gene
 **/
-void sample::insertDataIntoMostExpressed(int index)
+void sample::insertDataIntoMostExpressed(int &index)
 {
 	this->mostExpressed.insert(index);
 }
@@ -179,7 +179,7 @@ void sample::insertDataIntoMostExpressed(int index)
 
 	@param p Parametro di input di tipo double
 **/
-void sample::buildExpressedSet(double p)
+void sample::buildExpressedSet(double &p)
 {
 	std::multimap<double,int> tmp;
 
@@ -204,9 +204,10 @@ void sample::buildExpressedSet(double p)
 
 	@param p Parametro di input di tipo double
 **/
-void sample::buildExpressedSet2(double p)
+void sample::buildExpressedSet2(double &p)
 {
-	double median=getMedian(this->getGenesExpression());
+	std::vector<double> gen=this->getGenesExpression();
+	double median=getMedian(gen);
 	int i=0;
 	
 	while(this->getMostExpressed().size()<=10)
@@ -268,7 +269,7 @@ std::ostream& operator<<(std::ostream &os, const sample &s)
 
 	@return Mediana del vector di double
 */
-double getMedian(std::vector<double> values)
+double getMedian(std::vector<double> &values)
 {
 	std::vector<double> tmp=values;
 

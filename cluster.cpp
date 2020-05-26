@@ -114,7 +114,7 @@ const std::set<std::string>& cluster::getSplittedWith() const
 
 	@param id ID del cluster da settare
 **/
-void cluster::setId(std::string id)
+void cluster::setId(std::string &id)
 {
 	this->id=id;
 }
@@ -126,7 +126,7 @@ void cluster::setId(std::string id)
 
 	@param elements Elements del cluster da settare
 **/
-void cluster::setElements(std::vector<sample> elements)
+void cluster::setElements(std::vector<sample> &elements)
 {
 	this->elements=elements;
 }
@@ -138,7 +138,7 @@ void cluster::setElements(std::vector<sample> elements)
 
 	@param indices Indici del cluster da settare
 **/
-void cluster::setIndices(std::vector<int> indices)
+void cluster::setIndices(std::vector<int> &indices)
 {
 	this->indices=indices;
 }
@@ -150,7 +150,7 @@ void cluster::setIndices(std::vector<int> indices)
 
 	@param rhn RHN del cluster da settare
 **/
-void cluster::setRhn(std::map<int,std::vector<double>> rhn)
+void cluster::setRhn(std::map<int,std::vector<double>> &rhn)
 {
 	this->rhn=rhn;
 }
@@ -162,7 +162,7 @@ void cluster::setRhn(std::map<int,std::vector<double>> rhn)
 
 	@param tm TM del cluster da settare
 **/
-void cluster::setTm(double tm)
+void cluster::setTm(double &tm)
 {
 	this->tm=tm;
 }
@@ -174,7 +174,7 @@ void cluster::setTm(double tm)
 
 	@param intraSim IntraSim del cluster da settare
 **/
-void cluster::setIntraSim(double intraSim)
+void cluster::setIntraSim(double &intraSim)
 {
 	this->intraSim=intraSim;
 }
@@ -186,7 +186,7 @@ void cluster::setIntraSim(double intraSim)
 
 	@param intraScore IntraScore del cluster da settare
 **/
-void cluster::setIntraScore(std::multimap<double,int> intraScore)
+void cluster::setIntraScore(std::multimap<double,int> &intraScore)
 {
 	this->intraScore=intraScore;
 }
@@ -198,7 +198,7 @@ void cluster::setIntraScore(std::multimap<double,int> intraScore)
 
 	@param splittedWith SplittedWith del cluster da settare
 **/
-void cluster::setSplittedWith(std::set<std::string> splittedWith)
+void cluster::setSplittedWith(std::set<std::string> &splittedWith)
 {
 	this->splittedWith=splittedWith;
 }
@@ -212,7 +212,7 @@ void cluster::setSplittedWith(std::set<std::string> splittedWith)
 
 	@param element Sample da inserire negli elements del cluster
 **/
-void cluster::insertDataIntoElements(sample element)
+void cluster::insertDataIntoElements(sample &element)
 {
 	this->elements.push_back(element);
 }
@@ -224,7 +224,7 @@ void cluster::insertDataIntoElements(sample element)
 
 	@param index Indice da inserire negli indici del cluster
 **/
-void cluster::insertDataIntoIndices(int index)
+void cluster::insertDataIntoIndices(int &index)
 {
 	this->indices.push_back(index);
 }
@@ -237,7 +237,7 @@ void cluster::insertDataIntoIndices(int index)
 	@param i Valore intero
 	@param d Vector di double
 **/
-void cluster::insertDataIntoRhn(int i,std::vector<double> d)
+void cluster::insertDataIntoRhn(int i,std::vector<double> &d)
 {
 	this->rhn[i]=d;
 }
@@ -250,7 +250,7 @@ void cluster::insertDataIntoRhn(int i,std::vector<double> d)
 	@param d Valore double
 	@param i Valore intero
 **/
-void cluster::insertDataIntoIntraScore(double d,int i)
+void cluster::insertDataIntoIntraScore(double &d,int &i)
 {
 	this->intraScore.insert(std::make_pair(d,i));
 }
@@ -262,7 +262,7 @@ void cluster::insertDataIntoIntraScore(double d,int i)
 
 	@param s Stringa da inserire nello SplittedWith del cluster
 **/
-void cluster::insertDataIntoSplittedWith(std::string s)
+void cluster::insertDataIntoSplittedWith(std::string &s)
 {
 	this->splittedWith.insert(s);
 }

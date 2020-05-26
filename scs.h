@@ -82,7 +82,7 @@ public:
 
 		@param id ID del sample da settare
 	**/
-	void setId(int id);
+	void setId(int &id);
 
 	/**
 		@brief Metodo setName
@@ -91,7 +91,7 @@ public:
 
 		@param name Nome del sample da settare
 	**/
-	void setName(std::string name);
+	void setName(std::string &name);
 
 	/**
 		@brief Metodo setMapExpression
@@ -100,7 +100,7 @@ public:
 
 		@param mapExpression MapExpression del sample da settare
 	**/
-	void setMapExpression(std::map<std::string,double> mapExpression);
+	void setMapExpression(std::map<std::string,double> &mapExpression);
 
 	/**
 		@brief Metodo setGenesExpression
@@ -109,7 +109,7 @@ public:
 
 		@param genesExpression GenesExpression del sample da settare
 	**/
-	void setGenesExpression(std::vector<double> genesExpression);
+	void setGenesExpression(std::vector<double> &genesExpression);
 
 	/**
 		@brief Metodo setMostExpressed
@@ -118,7 +118,7 @@ public:
 
 		@param mostExpressed MostExpressed del sample da settare
 	**/
-	void setMostExpressed(std::set<int> mostExpressed);
+	void setMostExpressed(std::set<int> &mostExpressed);
 
 	// Metodi per inserire i dati
 
@@ -130,7 +130,7 @@ public:
 		@param geneName Nome del gene
 		@param rpkm RPKM del gene rispetto al sample
 	**/
-	void insertDataIntoMapExpression(std::string geneName,double rpkm);
+	void insertDataIntoMapExpression(std::string &geneName,double &rpkm);
 
 	/**
 		@brief Metodo insertDataIntoGenesExpression
@@ -139,7 +139,7 @@ public:
 
 		@param rpkm RPKM relativo al sample (indipendentemente dal gene associato)
 	**/
-	void insertDataIntoGenesExpression(double rpkm);
+	void insertDataIntoGenesExpression(double &rpkm);
 
 	/**
 		@brief Metodo insertDataIntoMostExpressed
@@ -148,7 +148,7 @@ public:
 
 		@param index Indice del gene
 	**/
-	void insertDataIntoMostExpressed(int index);
+	void insertDataIntoMostExpressed(int &index);
 
 	// Metodi per costruire il MostExpressed del sample
 
@@ -159,7 +159,7 @@ public:
 
 		@param p Parametro di input di tipo double
 	**/
-	void buildExpressedSet(double p);
+	void buildExpressedSet(double &p);
 
 	/**
 		@brief Metodo buildExpressedSet2
@@ -168,7 +168,7 @@ public:
 
 		@param p Parametro di input di tipo double
 	**/
-	void buildExpressedSet2(double p);
+	void buildExpressedSet2(double &p);
 };	// Fine classe sample
 
 // Funzioni globali
@@ -194,6 +194,6 @@ std::ostream& operator<<(std::ostream &os, const sample &s);
 
 	@return Mediana del vector di double
 */
-double getMedian(std::vector<double> values);
+double getMedian(std::vector<double> &values);
 
 #endif

@@ -56,7 +56,7 @@ double retScore::getScore() const
 
 	@param i i del retScore da settare
 **/
-void retScore::setI(int i)
+void retScore::setI(int &i)
 {
 	this->i=i;
 }
@@ -68,7 +68,7 @@ void retScore::setI(int i)
 
 	@param j j del retScore da settare
 **/
-void retScore::setJ(int j)
+void retScore::setJ(int &j)
 {
 	this->j=j;
 }
@@ -80,7 +80,7 @@ void retScore::setJ(int j)
 
 	@param score score del retScore da settare
 **/
-void retScore::setScore(double score)
+void retScore::setScore(double &score)
 {
 	this->score=score;
 }
@@ -103,7 +103,7 @@ std::string retScore::string() const
 // Funzioni globali
 
 /**
-	@brief cosineSimilarity
+	@brief Funzione cosineSimilarity
 
 	È compatibile con similarityFunction
 	https://en.wikipedia.org/wiki/Cosine_similarity
@@ -115,7 +115,7 @@ std::string retScore::string() const
 
 	@return Puntatore a retScore
 **/
-retScore* cosineSimilarity(std::vector<double> x,std::vector<double> y,int xi,int yi)
+retScore* cosineSimilarity(std::vector<double> &x,std::vector<double> &y,int &xi,int &yi)
 {
 	retScore* ret=new retScore();
 	double prod=0.0;
@@ -134,13 +134,14 @@ retScore* cosineSimilarity(std::vector<double> x,std::vector<double> y,int xi,in
 
 	ret->setI(xi);
 	ret->setJ(yi);
-	ret->setScore(prod/(magnitude1*magnitude2));
+	double score=prod/(magnitude1*magnitude2);
+	ret->setScore(score);
 
 	return ret;
 }
 
 /**
-	@brief euclideanSimilarity
+	@brief Funzione euclideanSimilarity
 
 	È compatibile con similarityFunction
 	https://en.wikipedia.org/wiki/Euclidean_distance
@@ -152,7 +153,7 @@ retScore* cosineSimilarity(std::vector<double> x,std::vector<double> y,int xi,in
 
 	@return Puntatore a retScore
 **/
-retScore* euclideanSimilarity(std::vector<double> x,std::vector<double> y,int xi,int yi)
+retScore* euclideanSimilarity(std::vector<double> &x,std::vector<double> &y,int &xi,int &yi)
 {
 	retScore* ret=new retScore();
 	double sum=0.0;
@@ -163,13 +164,14 @@ retScore* euclideanSimilarity(std::vector<double> x,std::vector<double> y,int xi
 	ret->setI(xi);
 	ret->setJ(yi);
 	// Negativo, in quanto devo massimizzarlo, dato che lo sto usando come misura di similarità
-	ret->setScore(-sqrt(sum));
+	double score=-sqrt(sum);
+	ret->setScore(score);
 
 	return ret;
 }
 
 /**
-	@brief minkowskiSimilarity
+	@brief Funzione minkowskiSimilarity
 
 	È compatibile con similarityFunction
 	https://en.wikipedia.org/wiki/Minkowski_distance
@@ -181,7 +183,7 @@ retScore* euclideanSimilarity(std::vector<double> x,std::vector<double> y,int xi
 
 	@return Puntatore a retScore
 **/
-retScore* minkowskiSimilarity(std::vector<double> x,std::vector<double> y,int xi,int yi)
+retScore* minkowskiSimilarity(std::vector<double> &x,std::vector<double> &y,int &xi,int &yi)
 {
 	retScore* ret=new retScore();
 	// p è hardcoded per mantenere consistenza
@@ -195,13 +197,14 @@ retScore* minkowskiSimilarity(std::vector<double> x,std::vector<double> y,int xi
 	ret->setI(xi);
 	ret->setJ(yi);
 	// Negativo, in quanto devo massimizzarlo, dato che lo sto usando come misura di similarità
-	ret->setScore(-pow(sum,1.0/p));
+	double score=-pow(sum,1.0/p);
+	ret->setScore(score);
 
 	return ret;
 }
 
 /**
-	@brief geneExpressed
+	@brief Funzione geneExpressed
 
 	È compatibile con similarityFunction
 
@@ -212,7 +215,7 @@ retScore* minkowskiSimilarity(std::vector<double> x,std::vector<double> y,int xi
 
 	@return Puntatore a retScore
 **/
-retScore* geneExpressed(std::vector<double> x,std::vector<double> y,int xi,int yi)
+retScore* geneExpressed(std::vector<double> &x,std::vector<double> &y,int &xi,int &yi)
 {
 	retScore* ret=new retScore();
 	// p è hardcoded per mantenere consistenza
@@ -226,13 +229,14 @@ retScore* geneExpressed(std::vector<double> x,std::vector<double> y,int xi,int y
 
 	ret->setI(xi);
 	ret->setJ(yi);
-	ret->setScore(sum/x.size());
+	double score=sum/x.size();
+	ret->setScore(score);
 
 	return ret;
 }
 
 /**
-	@brief avgCosine
+	@brief Funzione avgCosine
 
 	È compatibile con clusterSimilarityFunction
 
@@ -243,7 +247,7 @@ retScore* geneExpressed(std::vector<double> x,std::vector<double> y,int xi,int y
 
 	@return Puntatore a retScore
 **/
-retScore* avgCosine(cluster* c1,cluster* c2,int ci,int cj)
+retScore* avgCosine(cluster* c1,cluster* c2,int &ci,int &cj)
 {
 	retScore* ret=new retScore();
 	retScore* tmp=nullptr;
@@ -278,13 +282,14 @@ retScore* avgCosine(cluster* c1,cluster* c2,int ci,int cj)
 
 		ret->setI(ci);
 		ret->setJ(cj);
-		ret->setScore(avg/denom);
+		double finalScore=avg/denom;
+		ret->setScore(finalScore);
 
 		return ret;
 }
 
 /**
-	@brief avgGenes
+	@brief Funzione avgGenes
 
 	È compatibile con clusterSimilarityFunction
 
@@ -295,7 +300,7 @@ retScore* avgCosine(cluster* c1,cluster* c2,int ci,int cj)
 
 	@return Puntatore a retScore
 **/
-retScore* avgGenes(cluster* c1,cluster* c2,int ci,int cj)
+retScore* avgGenes(cluster* c1,cluster* c2,int &ci,int &cj)
 {
 	retScore* ret=new retScore();
 	double denom=0.0;
@@ -330,13 +335,14 @@ retScore* avgGenes(cluster* c1,cluster* c2,int ci,int cj)
 
 		ret->setI(ci);
 		ret->setJ(cj);
-		ret->setScore(avg/denom);
+		double finalScore=avg/denom;
+		ret->setScore(finalScore);
 
 		return ret;
 }
 
 /**
-	@brief intraSimilarity
+	@brief Funzione intraSimilarity
 
 	intraSimilarity
 
@@ -347,6 +353,8 @@ retScore* avgGenes(cluster* c1,cluster* c2,int ci,int cj)
 **/
 std::tuple<double,std::multimap<double,int>> intraSimilarity(cluster* c,similarityFunction sim)
 {
+	std::vector<double> genI;
+	std::vector<double> genJ;
 	double denom=0.0;
 	double avg=0.0;
 	double score=0.0;
@@ -357,7 +365,9 @@ std::tuple<double,std::multimap<double,int>> intraSimilarity(cluster* c,similari
 	for(int i=0;i<c->len();i++)
 		for(int j=i+1;j<c->len();j++)
 		{
-			tmp=sim(c->getElements()[i].getGenesExpression(),c->getElements()[j].getGenesExpression(),i,j);
+			genI=c->getElements()[i].getGenesExpression();
+			genJ=c->getElements()[j].getGenesExpression();
+			tmp=sim(genI,genJ,i,j);
 			score=tmp->getScore();
 			delete tmp;
 			tmp=nullptr;
@@ -376,7 +386,7 @@ std::tuple<double,std::multimap<double,int>> intraSimilarity(cluster* c,similari
 }
 
 /**
-	@brief intraDistance
+	@brief Funzione intraDistance
 
 	intraDistance
 
@@ -419,7 +429,7 @@ std::tuple<double,std::multimap<double,int>> intraDistance(cluster* c)
 }
 
 /**
-	@brief newCluster
+	@brief Funzione newCluster
 
 	Crea un nuovo cluster
 
@@ -428,9 +438,10 @@ std::tuple<double,std::multimap<double,int>> intraDistance(cluster* c)
 
 	@return Puntatore a cluster
 **/
-cluster* newCluster(std::vector<sample> cells,std::vector<int> indices)
+cluster* newCluster(std::vector<sample> &cells,std::vector<int> &indices)
 {
 	cluster* c=new cluster;
+	double tm=-1.0;
 	std::vector<std::string> strindices;
 	std::string id="";
 	sort(indices.begin(),indices.end());
@@ -441,7 +452,7 @@ cluster* newCluster(std::vector<sample> cells,std::vector<int> indices)
 		strindices.push_back(std::to_string(*it));
 	}
 
-	c->setTm(-1.0);
+	c->setTm(tm);
 	
 	for(std::vector<std::string>::iterator it=strindices.begin();it!=strindices.end();it++)
 	{
@@ -464,7 +475,7 @@ cluster* newCluster(std::vector<sample> cells,std::vector<int> indices)
 }
 
 /**
-	@brief splitCluster
+	@brief Funzione splitCluster
 
 	Splitta un cluster in due nuovi cluster
 
@@ -475,7 +486,7 @@ cluster* newCluster(std::vector<sample> cells,std::vector<int> indices)
 
 	@return 2 puntatori a cluster
 **/
-std::tuple<cluster*,cluster*> splitCluster(cluster* c,std::vector<sample> cells,std::vector<int> ix,std::vector<int> jx)
+std::tuple<cluster*,cluster*> splitCluster(cluster* c,std::vector<sample> &cells,std::vector<int> &ix,std::vector<int> &jx)
 {
 	cluster* split1=newCluster(cells,ix);
 	cluster* split2=newCluster(cells,jx);
@@ -484,16 +495,18 @@ std::tuple<cluster*,cluster*> splitCluster(cluster* c,std::vector<sample> cells,
 	//split2->setSplittedWith(c->getSplittedWith());
 
 	//split1->insertDataIntoSplittedWith(split1->getId());
-	split1->insertDataIntoSplittedWith(split2->getId());
+	std::string split2ID=split2->getId();
+	split1->insertDataIntoSplittedWith(split2ID);
 
-	split2->insertDataIntoSplittedWith(split1->getId());
+	std::string split1ID=split1->getId();
+	split2->insertDataIntoSplittedWith(split1ID);
 	//split2->insertDataIntoSplittedWith(split2->getId());
 
 	return {split1,split2};
 }
 
 /**
-	@brief fuseCluster
+	@brief Funzione fuseCluster
 
 	Fonde due cluster in un nuovo cluster
 
@@ -505,18 +518,25 @@ std::tuple<cluster*,cluster*> splitCluster(cluster* c,std::vector<sample> cells,
 
 	@return Puntatore a cluster
 **/
-cluster* fuseCluster(cluster* c1,cluster* c2,std::vector<sample> cells,std::map<int,std::vector<double>> rhn,double tm)
+cluster* fuseCluster(cluster* c1,cluster* c2,std::vector<sample> &cells,std::map<int,std::vector<double>> &rhn,double &tm)
 {
 	std::vector<int> fusedIndices;
+	std::string s="";
 	fusedIndices.insert(fusedIndices.end(),c1->getIndices().begin(),c1->getIndices().end());
 	fusedIndices.insert(fusedIndices.end(),c2->getIndices().begin(),c2->getIndices().end());
 	cluster* newClust=newCluster(cells,fusedIndices);
 
 	for(std::set<std::string>::const_iterator it=c1->getSplittedWith().begin();it!=c1->getSplittedWith().end();it++)
-		newClust->insertDataIntoSplittedWith(*it);
+	{
+		s=*it;
+		newClust->insertDataIntoSplittedWith(s);
+	}
 
 	for(std::set<std::string>::const_iterator it=c2->getSplittedWith().begin();it!=c2->getSplittedWith().end();it++)
-		newClust->insertDataIntoSplittedWith(*it);
+	{
+		s=*it;
+		newClust->insertDataIntoSplittedWith(s);
+	}
 
 	newClust->setRhn(rhn);
 	newClust->setTm(tm);

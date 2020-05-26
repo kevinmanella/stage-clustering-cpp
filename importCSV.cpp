@@ -1,4 +1,4 @@
-#include "scs.h"
+#include "importCSV.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -18,7 +18,7 @@
 
 	@return Vector di samples
 **/
-std::vector<sample> buildSamplesFromCSV(std::string filePath)
+std::vector<sample> buildSamplesFromCSV(std::string &filePath)
 {
 	std::ifstream inFile;
 	inFile.open(filePath);
@@ -72,8 +72,9 @@ std::vector<sample> buildSamplesFromCSV(std::string filePath)
 		// Salvo i RPKM in genesExpression e inserisco i dati in mapExpression
 		for(int i=0;i<size;i++)
 		{
-			samples[i].insertDataIntoMapExpression(geneName,std::stod(lineVector[i]));
-			samples[i].insertDataIntoGenesExpression(std::stod(lineVector[i]));
+			double val=std::stod(lineVector[i]);
+			samples[i].insertDataIntoMapExpression(geneName,val);
+			samples[i].insertDataIntoGenesExpression(val);
 		}
 	}
 
@@ -90,7 +91,7 @@ std::vector<sample> buildSamplesFromCSV(std::string filePath)
 
 	@return Map che ha come chiave il nome del sample e come valore l'ID del sample
 **/
-std::map<std::string,int> buildNameToIndexFromCSV(std::string filePath)
+std::map<std::string,int> buildNameToIndexFromCSV(std::string &filePath)
 {
 	std::ifstream inFile;
 	inFile.open(filePath);
