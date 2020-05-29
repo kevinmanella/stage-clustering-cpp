@@ -263,14 +263,14 @@ retScore* avgCosine(cluster* c1,cluster* c2,int &ci,int &cj)
 			std::vector<double> ge1,ge2;
 
 			if(i<n)
-				ge1=c1->getElements()[i].getGenesExpression();
+				ge1=c1->getElements()[i]->getGenesExpression();
 			else
-				ge1=c2->getElements()[i-n].getGenesExpression();
+				ge1=c2->getElements()[i-n]->getGenesExpression();
 
 			if(j<n)
-				ge2=c1->getElements()[j].getGenesExpression();
+				ge2=c1->getElements()[j]->getGenesExpression();
 			else
-				ge2=c2->getElements()[j-n].getGenesExpression();
+				ge2=c2->getElements()[j-n]->getGenesExpression();
 
 			tmp=cosineSimilarity(ge1,ge2,i,j);
 			score=tmp->getScore();
@@ -300,7 +300,7 @@ retScore* avgCosine(cluster* c1,cluster* c2,int &ci,int &cj)
 
 	@return Puntatore a retScore
 **/
-retScore* avgGenes(cluster* c1,cluster* c2,int &ci,int &cj)
+retScore* avgGenes(cluster* c1,cluster * c2,int &ci,int &cj)
 {
 	retScore* ret=new retScore();
 	double denom=0.0;
@@ -315,14 +315,14 @@ retScore* avgGenes(cluster* c1,cluster* c2,int &ci,int &cj)
 			std::set<int> ge1,ge2,ge3,ge4;
 
 			if(i<n)
-				ge1=c1->getElements()[i].getMostExpressed();
+				ge1=c1->getElements()[i]->getMostExpressed();
 			else
-				ge1=c2->getElements()[i-n].getMostExpressed();
+				ge1=c2->getElements()[i-n]->getMostExpressed();
 
 			if(j<n)
-				ge2=c1->getElements()[j].getMostExpressed();
+				ge2=c1->getElements()[j]->getMostExpressed();
 			else
-				ge2=c2->getElements()[j-n].getMostExpressed();
+				ge2=c2->getElements()[j-n]->getMostExpressed();
 
 			set_intersection(ge1.begin(),ge1.end(),ge2.begin(),ge2.end(),
 							 std::inserter(ge3,ge3.begin()));
@@ -344,7 +344,7 @@ retScore* avgGenes(cluster* c1,cluster* c2,int &ci,int &cj)
 /**
 	@brief Funzione intraSimilarity
 
-	intraSimilarity
+	Funzione intraSimilarity
 
 	@param c Puntatore a cluster
 	@param sim Funzione di similarità
@@ -355,9 +355,11 @@ std::tuple<double,std::multimap<double,int>> intraSimilarity(cluster* c,similari
 {
 	std::vector<double> genI;
 	std::vector<double> genJ;
+
 	double denom=0.0;
 	double avg=0.0;
 	double score=0.0;
+
 	retScore* tmp=nullptr;
 
 	std::vector<double> intraScores(c->len());
@@ -365,8 +367,8 @@ std::tuple<double,std::multimap<double,int>> intraSimilarity(cluster* c,similari
 	for(int i=0;i<c->len();i++)
 		for(int j=i+1;j<c->len();j++)
 		{
-			genI=c->getElements()[i].getGenesExpression();
-			genJ=c->getElements()[j].getGenesExpression();
+			genI=c->getElements()[i]->getGenesExpression();
+			genJ=c->getElements()[j]->getGenesExpression();
 			tmp=sim(genI,genJ,i,j);
 			score=tmp->getScore();
 			delete tmp;
@@ -388,7 +390,7 @@ std::tuple<double,std::multimap<double,int>> intraSimilarity(cluster* c,similari
 /**
 	@brief Funzione intraDistance
 
-	intraDistance
+	Funzione intraDistance
 
 	@param c Puntatore a cluster
 
@@ -407,12 +409,13 @@ std::tuple<double,std::multimap<double,int>> intraDistance(cluster* c)
 		{
 			std::set<int> tmp1,tmp2;
 
-			set_intersection(c->getElements()[i].getMostExpressed().begin(),c->getElements()[i].getMostExpressed().end(),
-							 c->getElements()[j].getMostExpressed().begin(),c->getElements()[j].getMostExpressed().end(),
+			set_intersection(c->getElements()[i]->getMostExpressed().begin(),c->getElements()[i]->getMostExpressed().end(),
+							 c->getElements()[j]->getMostExpressed().begin(),c->getElements()[j]->getMostExpressed().end(),
 							 std::inserter(tmp1,tmp1.begin()));
-			set_union(c->getElements()[i].getMostExpressed().begin(),c->getElements()[i].getMostExpressed().end(),
-					  c->getElements()[j].getMostExpressed().begin(),c->getElements()[j].getMostExpressed().end(),
+			set_union(c->getElements()[i]->getMostExpressed().begin(),c->getElements()[i]->getMostExpressed().end(),
+					  c->getElements()[j]->getMostExpressed().begin(),c->getElements()[j]->getMostExpressed().end(),
 					  std::inserter(tmp2,tmp2.begin()));
+
 			score=double(tmp1.size())/double(tmp2.size());
 			intraScores[i]+=score;
 			intraScores[j]+=score;
@@ -433,18 +436,20 @@ std::tuple<double,std::multimap<double,int>> intraDistance(cluster* c)
 
 	Crea un nuovo cluster
 
-	@param cells Vector di samples
+	@param cells Vector di puntatori a sample
 	@param indices Vector di interi (indici dei samples da inserire nel cluster)
 
 	@return Puntatore a cluster
 **/
-cluster* newCluster(std::vector<sample> &cells,std::vector<int> &indices)
+cluster* newCluster(std::vector<sample*> &cells,std::vector<int> &indices)
 {
 	cluster* c=new cluster;
 	double tm=-1.0;
 	std::vector<std::string> strindices;
 	std::string id="";
+
 	sort(indices.begin(),indices.end());
+
 	for(std::vector<int>::iterator it=indices.begin();it!=indices.end();it++)
 	{
 		c->insertDataIntoElements(cells[*it]);
@@ -464,10 +469,11 @@ cluster* newCluster(std::vector<sample> &cells,std::vector<int> &indices)
 	c->setId(id);
 
 	auto [intraSim,intraScore]=intraSimilarity(c,cosineSimilarity);
-	//auto [intraSim,intraScore]=intraSimilarity(c,euclideanSimilarity);
-	//auto [intraSim,intraScore]=intraSimilarity(c,minkowskiSimilarity);
-	//auto [intraSim,intraScore]=intraSimilarity(c,geneExpressed);
-	//auto [intraSim,intraScore]=intraDistance(c);
+	// auto [intraSim,intraScore]=intraSimilarity(c,euclideanSimilarity);
+	// auto [intraSim,intraScore]=intraSimilarity(c,minkowskiSimilarity);
+	// auto [intraSim,intraScore]=intraSimilarity(c,geneExpressed);
+	// auto [intraSim,intraScore]=intraDistance(c);
+
 	c->setIntraSim(intraSim);
 	c->setIntraScore(intraScore);
 
@@ -480,13 +486,13 @@ cluster* newCluster(std::vector<sample> &cells,std::vector<int> &indices)
 	Splitta un cluster in due nuovi cluster
 
 	@param c Puntatore a cluster
-	@param cells Vector di samples
+	@param cells Vector di puntatori a sample
 	@param ix Vector di interi (indici dei samples da inserire nel primo cluster "figlio")
 	@param jx Vector di interi (indici dei samples da inserire nel secondo cluster "figlio")
 
 	@return 2 puntatori a cluster
 **/
-std::tuple<cluster*,cluster*> splitCluster(cluster* c,std::vector<sample> &cells,std::vector<int> &ix,std::vector<int> &jx)
+std::tuple<cluster*,cluster*> splitCluster(cluster* c,std::vector<sample*> &cells,std::vector<int> &ix,std::vector<int> &jx)
 {
 	cluster* split1=newCluster(cells,ix);
 	cluster* split2=newCluster(cells,jx);
@@ -512,13 +518,13 @@ std::tuple<cluster*,cluster*> splitCluster(cluster* c,std::vector<sample> &cells
 
 	@param c1 Puntatore a cluster
 	@param c2 Puntatore a cluster
-	@param cells Vector di samples
+	@param cells Vector di puntatori a sample
 	@param rhn Mappa <int,vector<double>> (RHN del nuovo cluster)
 	@param tm Valore double (TM del nuovo cluster)
 
 	@return Puntatore a cluster
 **/
-cluster* fuseCluster(cluster* c1,cluster* c2,std::vector<sample> &cells,std::map<int,std::vector<double>> &rhn,double &tm)
+cluster* fuseCluster(cluster* c1,cluster* c2,std::vector<sample*> &cells,std::map<int,std::vector<double>> &rhn,double &tm)
 {
 	std::vector<int> fusedIndices;
 	std::string s="";
@@ -546,6 +552,7 @@ cluster* fuseCluster(cluster* c1,cluster* c2,std::vector<sample> &cells,std::map
 	//auto [intraSim,intraScore]=intraSimilarity(newClust,minkowskiSimilarity);
 	//auto [intraSim,intraScore]=intraSimilarity(newClust,geneExpressed);
 	//auto [intraSim,intraScore]=intraDistance(newClust);
+
 	newClust->setIntraSim(intraSim);
 	newClust->setIntraScore(intraScore);
 

@@ -28,7 +28,7 @@ std::string cluster::getId() const
 
 	@return Elements del cluster
 **/
-const std::vector<sample>& cluster::getElements() const
+const std::vector<sample*>& cluster::getElements() const
 {
 	return elements;
 }
@@ -126,7 +126,7 @@ void cluster::setId(std::string &id)
 
 	@param elements Elements del cluster da settare
 **/
-void cluster::setElements(std::vector<sample> &elements)
+void cluster::setElements(std::vector<sample*> &elements)
 {
 	this->elements=elements;
 }
@@ -212,7 +212,7 @@ void cluster::setSplittedWith(std::set<std::string> &splittedWith)
 
 	@param element Sample da inserire negli elements del cluster
 **/
-void cluster::insertDataIntoElements(sample &element)
+void cluster::insertDataIntoElements(sample* element)
 {
 	this->elements.push_back(element);
 }
@@ -237,7 +237,7 @@ void cluster::insertDataIntoIndices(int &index)
 	@param i Valore intero
 	@param d Vector di double
 **/
-void cluster::insertDataIntoRhn(int i,std::vector<double> &d)
+void cluster::insertDataIntoRhn(int &i,std::vector<double> &d)
 {
 	this->rhn[i]=d;
 }
@@ -281,8 +281,8 @@ std::string cluster::string() const
 {
 	std::vector<std::string> elementsName;
 
-	for(std::vector<sample>::const_iterator it=this->getElements().begin();it!=this->getElements().end();it++)
-		elementsName.push_back((*it).getName());
+	for(std::vector<sample*>::const_iterator it=this->getElements().begin();it!=this->getElements().end();it++)
+		elementsName.push_back((*it)->getName());
 
 	std::string s="";
 	s+='"';
@@ -327,9 +327,9 @@ std::ostream& operator<<(std::ostream &os, const cluster &c)
 {
 	os<<"ID: "<<c.getId()<<std::endl;
 
-	os<<"Quantità di Elements: "<<c.getElements().size()<<std::endl;
-	/*for(std::vector<sample>::const_iterator it=c.getElements().begin();it!=c.getElements().end();it++)
-		os<<*it<<std::endl;*/
+	os<<"Elements: ";
+	for(std::vector<sample*>::const_iterator it=c.getElements().begin();it!=c.getElements().end();it++)
+		os<<*it<<std::endl;
 
 	os<<"Indices: ";
 	for(std::vector<int>::const_iterator it=c.getIndices().begin();it!=c.getIndices().end();it++)

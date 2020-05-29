@@ -131,42 +131,45 @@ void resCalcTerm::setResult(double &result)
 
 	Funzione calcBuildR
 
-	@param s Sample
+	@param s Puntatore a sample
 	@param sIndex Valore intero
-	@param sampleX Vector di samples
-	@param sampleY Vector di samples
+	@param sampleX Vector di puntatori a sample
+	@param sampleY Vector di puntatori a sample
 
 	@return Puntatore a resCalcR
 **/
-resCalcR* calcBuildR(sample &s,int &sIndex,std::vector<sample> &sampleX,std::vector<sample> &sampleY)
+resCalcR* calcBuildR(sample* s,int &sIndex,std::vector<sample*> &sampleX,std::vector<sample*> &sampleY)
 {
 	resCalcR* resR=new resCalcR();
+
+	std::vector<double> R;
 	std::vector<double> genS;
 	std::vector<double> genSampleX;
 	std::vector<double> genSampleY;
-	std::vector<double> R;
 	std::vector<double> num;
 	std::vector<double> summand;
+
 	double div=0.0;
 	double denom=0.0;
+
 	int lenX=sampleX.size();
 	int lenY=sampleY.size();
 	int N=lenX+lenY;
 
-	for(int i=0;i<s.getGenesExpression().size();i++)
+	for(int i=0;i<s->getGenesExpression().size();i++)
 		R.push_back(0.0);
 
 	for(int i=0;i<N;i++)
 	{
-		genS=s.getGenesExpression();
+		genS=s->getGenesExpression();
 		if(i<lenX)
 		{
-			genSampleX=sampleX[i].getGenesExpression();
+			genSampleX=sampleX[i]->getGenesExpression();
 			num=vectorDifference(genS,genSampleX);
 		}
 		else
 		{
-			genSampleY=sampleY[i-lenX].getGenesExpression();
+			genSampleY=sampleY[i-lenX]->getGenesExpression();
 			num=vectorDifference(genS,genSampleY);
 		}
 
@@ -189,22 +192,24 @@ resCalcR* calcBuildR(sample &s,int &sIndex,std::vector<sample> &sampleX,std::vec
 /**
 	@brief Funzione buildR
 
-	Funzione buildR (con codice in parallelo)
+	Funzione buildR
 
-	@param sampleX Vector di samples
-	@param sampleY Vector di samples
+	@param sampleX Vector di puntatori a sample
+	@param sampleY Vector di puntatori a sample
 
 	@return Mappa <int,vector<double>>
 **/
-std::map<int,std::vector<double>> buildR(std::vector<sample> &sampleX,std::vector<sample> &sampleY)
+std::map<int,std::vector<double>> buildR(std::vector<sample*> &sampleX,std::vector<sample*> &sampleY)
 {
-	std::map<int,std::vector<double>> RHN;
 	resCalcR* r=nullptr;
+
+	std::map<int,std::vector<double>> rhn;
+
 	int lenX=sampleX.size();
 	int lenY=sampleY.size();
 	int N=lenX+lenY;
 
-	#pragma omp parallel for private(r)
+	//#pragma omp parallel for private(r,rhn)
 	for(int i=0;i<N;i++)
 	{
 		if(i<lenX)
@@ -212,12 +217,12 @@ std::map<int,std::vector<double>> buildR(std::vector<sample> &sampleX,std::vecto
 		else
 			r=calcBuildR(sampleY[i-lenX],i,sampleX,sampleY);
 
-		RHN[r->getI()]=r->getResult();
+		rhn[r->getI()]=r->getResult();
 		delete r;
 		r=nullptr;
 	}
 
-	return RHN;
+	return rhn;
 }
 
 /**
@@ -226,22 +231,25 @@ std::map<int,std::vector<double>> buildR(std::vector<sample> &sampleX,std::vecto
 	Funzione calcUpdateR
 
 	@param currentR Vector di double
-	@param s Sample
+	@param s Puntatore a sample
 	@param sIndex Valore intero
-	@param sampleX Vector di samples
-	@param sampleY Vector di samples
+	@param sampleX Vector di puntatori a sample
+	@param sampleY Vector di puntatori a sample
 
 	@return Puntatore a resCalcR
 **/
-resCalcR* calcUpdateR(std::vector<double> &currentR,sample &s,int &sIndex,std::vector<sample> &sampleX,std::vector<sample> &sampleY)
+resCalcR* calcUpdateR(std::vector<double> &currentR,sample* s,int &sIndex,std::vector<sample*> &sampleX,std::vector<sample*> &sampleY)
 {
 	resCalcR* resR=new resCalcR();
+
 	std::vector<double> genS;
 	std::vector<double> genSampleY;
 	std::vector<double> num;
 	std::vector<double> summand;
+
 	double div=0.0;
 	double denom=0.0;
+
 	int lenX=sampleX.size();
 	int lenY=sampleY.size();
 	int N=lenX+lenY;
@@ -251,8 +259,8 @@ resCalcR* calcUpdateR(std::vector<double> &currentR,sample &s,int &sIndex,std::v
 
 	for(int i=0;i<lenY;i++)
 	{
-		genS=s.getGenesExpression();
-		genSampleY=sampleY[i].getGenesExpression();
+		genS=s->getGenesExpression();
+		genSampleY=sampleY[i]->getGenesExpression();
 		num=vectorDifference(genS,genSampleY);
 		denom=vectorNorm(num);
 
@@ -273,24 +281,26 @@ resCalcR* calcUpdateR(std::vector<double> &currentR,sample &s,int &sIndex,std::v
 /**
 	@brief Funzione updateR
 
-	Funzione updateR (con codice in parallelo)
+	Funzione updateR
 
-	@param sampleX Vector di samples
-	@param sampleY Vector di samples
+	@param sampleX Vector di puntatori a sample
+	@param sampleY Vector di puntatori a sample
 	@param RHNx Mappa <int,vector<double>>
 	@param RHNy Mappa <int,vector<double>>
 
 	@return Mappa <int,vector<double>>
 **/
-std::map<int,std::vector<double>> updateR(std::vector<sample> &sampleX,std::vector<sample> &sampleY,std::map<int,std::vector<double>> &RHNx,std::map<int,std::vector<double>> &RHNy)
+std::map<int,std::vector<double>> updateR(std::vector<sample*> &sampleX,std::vector<sample*> &sampleY,std::map<int,std::vector<double>> &RHNx,std::map<int,std::vector<double>> &RHNy)
 {
-	std::map<int,std::vector<double>> RHN;
 	resCalcR* r=nullptr;
+
+	std::map<int,std::vector<double>> rhn;
+
 	int lenX=sampleX.size();
 	int lenY=sampleY.size();
 	int N=lenX+lenY;
 
-	#pragma omp parallel for private(r)
+	//#pragma omp parallel for private(r,rhn)
 	for(int i=0;i<N;i++)
 	{
 		if(i<lenX)
@@ -304,40 +314,43 @@ std::map<int,std::vector<double>> updateR(std::vector<sample> &sampleX,std::vect
 			else
 				r=calcBuildR(sampleY[i-lenX],i,sampleX,sampleY);
 
-		RHN[r->getI()]=r->getResult();
+		rhn[r->getI()]=r->getResult();
 		delete r;
 		r=nullptr;
 	}
 
-	return RHN;
+	return rhn;
 }
 
 /**
 	@brief Funzione computeTestStat
 
-	Funzione computeTestStat (con codice in parallelo)
+	Funzione computeTestStat
 
-	@param sampleX Vector di samples
-	@param sampleY Vector di samples
+	@param sampleX Vector di puntatori a sample
+	@param sampleY Vector di puntatori a sample
 	@param RHN Mappa <int,vector<double>>
 
 	@return Valore double
 **/
-double computeTestStat(std::vector<sample> &sampleX,std::vector<sample> &sampleY,std::map<int,std::vector<double>> &RHN)
+double computeTestStat(std::vector<sample*> &sampleX,std::vector<sample*> &sampleY,std::map<int,std::vector<double>> &RHN)
 {
+	resCalcTerm* term=nullptr;
+	std::vector<resCalcTerm> termVector;
+
 	std::vector<double> r1Val;
 	std::vector<double> r2Val;
 	std::vector<double> diff;
+
 	int termValue0=0;
 	int termValue1=1;
 	int termValue2=2;
 	double norm=0.0;
-	resCalcTerm* term=nullptr;
-	std::vector<resCalcTerm> termVector;
+
 	int lenX=sampleX.size();
 	int lenY=sampleY.size();
 
-	#pragma omp parallel for private(r1Val,r2Val,RHN,diff,norm,term,termVector)
+	//#pragma omp parallel for private(r1Val,r2Val,RHN,diff,norm,term,termVector)
 	for(int i=0;i<=lenX;i++)
 		for(int j=0;j<=lenY-1;j++)
 		{
@@ -355,7 +368,7 @@ double computeTestStat(std::vector<sample> &sampleX,std::vector<sample> &sampleY
 			term=nullptr;
 		}
 
-	#pragma omp parallel for private(r1Val,r2Val,RHN,diff,norm,term,termVector)
+	//#pragma omp parallel for private(r1Val,r2Val,RHN,diff,norm,term,termVector)
 	for(int i=0;i<=lenX;i++)
 		for(int j=0;j<=lenX;j++)
 		{
@@ -376,7 +389,7 @@ double computeTestStat(std::vector<sample> &sampleX,std::vector<sample> &sampleY
 			}
 		}
 
-	#pragma omp parallel for private(r1Val,r2Val,RHN,diff,norm,term,termVector)
+	//#pragma omp parallel for private(r1Val,r2Val,RHN,diff,norm,term,termVector)
 	for(int i=0;i<=lenY-1;i++)
 		for(int j=0;j<=lenY-1;j++)
 		{

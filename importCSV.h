@@ -12,13 +12,13 @@
 /**
 	@brief Funzione buildSamplesFromCSV
 
-	Funzione che, dato il percorso di un file CSV, restituisce un vector di samples, creato leggendo i dati presenti nel file
+	Funzione che, dato il percorso di un file CSV, restituisce un vector di puntatori a sample, creato leggendo i dati presenti nel file
 
 	@param filePath Stringa contenente il percorso del file
 
-	@return Vector di samples
+	@return Vector di puntatori a sample
 **/
-std::vector<sample> buildSamplesFromCSV(std::string &filePath);
+std::vector<sample*> buildSamplesFromCSV(std::string &filePath);
 
 /**
 	@brief Funzione buildNameToIndexFromCSV

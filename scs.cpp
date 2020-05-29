@@ -206,21 +206,18 @@ void sample::buildExpressedSet(double &p)
 **/
 void sample::buildExpressedSet2(double &p)
 {
+	double tmp=p;
+
 	std::vector<double> gen=this->getGenesExpression();
 	double median=getMedian(gen);
-	int i=0;
-	
+
 	while(this->getMostExpressed().size()<=10)
 	{
-		i=0;
-		for(std::vector<double>::const_iterator it=this->getGenesExpression().begin();it!=this->getGenesExpression().end();it++)
-		{
-			if(*it>p*median)
+		for(int i=0;i<this->getGenesExpression().size();i++)
+			if(this->getGenesExpression()[i]>tmp*median)
 				this->insertDataIntoMostExpressed(i);
-
-			i++;
-		}
-		p*=0.9;
+		
+		tmp*=0.9;
 	}
 }
 

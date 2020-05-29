@@ -18,7 +18,7 @@ class cluster
 {
 private:
 	std::string id;
-	std::vector<sample> elements;
+	std::vector<sample*> elements;
 	std::vector<int> indices;
 	std::map<int,std::vector<double>> rhn;
 	double tm;
@@ -45,7 +45,7 @@ public:
 
 		@return Elements del cluster
 	**/
-	const std::vector<sample>& getElements() const;
+	const std::vector<sample*>& getElements() const;
 
 	/**
 		@brief Metodo getIndices
@@ -119,7 +119,7 @@ public:
 
 		@param elements Elements del cluster da settare
 	**/
-	void setElements(std::vector<sample> &elements);
+	void setElements(std::vector<sample*> &elements);
 
 	/**
 		@brief Metodo setIndices
@@ -184,7 +184,7 @@ public:
 
 		@param element Sample da inserire negli elements del cluster
 	**/
-	void insertDataIntoElements(sample &element);
+	void insertDataIntoElements(sample* element);
 
 	/**
 		@brief Metodo insertDataIntoIndices
@@ -203,7 +203,7 @@ public:
 		@param i Valore intero
 		@param d Vector di double
 	**/
-	void insertDataIntoRhn(int i,std::vector<double> &d);
+	void insertDataIntoRhn(int &i,std::vector<double> &d);
 
 	/**
 		@brief Metodo insertDataIntoIntraScore

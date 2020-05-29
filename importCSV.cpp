@@ -12,13 +12,13 @@
 /**
 	@brief Funzione buildSamplesFromCSV
 
-	Funzione che, dato il percorso di un file CSV, restituisce un vector di samples, creato leggendo i dati presenti nel file
+	Funzione che, dato il percorso di un file CSV, restituisce un vector di puntatori a sample, creato leggendo i dati presenti nel file
 
 	@param filePath Stringa contenente il percorso del file
 
-	@return Vector di samples
+	@return Vector di puntatori a sample
 **/
-std::vector<sample> buildSamplesFromCSV(std::string &filePath)
+std::vector<sample*> buildSamplesFromCSV(std::string &filePath)
 {
 	std::ifstream inFile;
 	inFile.open(filePath);
@@ -44,13 +44,14 @@ std::vector<sample> buildSamplesFromCSV(std::string &filePath)
 
 	const int size=cellNames.size();	// Rappresenta il numero di samples che vi sono nel file
 	
-	std::vector<sample> samples;
-	sample s;
+	sample* s=nullptr;
+	std::vector<sample*> samples;
 
 	for(int i=0;i<size;i++)
 	{
-		s.setId(i);
-		s.setName(cellNames[i]);
+		s=new sample();
+		s->setId(i);
+		s->setName(cellNames[i]);
 		samples.push_back(s);	// Inserisco i vari samples nel vector samples
 	}
 
@@ -73,8 +74,8 @@ std::vector<sample> buildSamplesFromCSV(std::string &filePath)
 		for(int i=0;i<size;i++)
 		{
 			double val=std::stod(lineVector[i]);
-			samples[i].insertDataIntoMapExpression(geneName,val);
-			samples[i].insertDataIntoGenesExpression(val);
+			samples[i]->insertDataIntoMapExpression(geneName,val);
+			samples[i]->insertDataIntoGenesExpression(val);
 		}
 	}
 

@@ -134,26 +134,26 @@ public:
 
 	Funzione calcBuildR
 
-	@param s Sample
+	@param s Puntatore a sample
 	@param sIndex Valore intero
-	@param sampleX Vector di samples
-	@param sampleY Vector di samples
+	@param sampleX Vector di puntatori a sample
+	@param sampleY Vector di puntatori a sample
 
 	@return Puntatore a resCalcR
 **/
-resCalcR* calcBuildR(sample &s,int &sIndex,std::vector<sample> &sampleX,std::vector<sample> &sampleY);
+resCalcR* calcBuildR(sample* s,int &sIndex,std::vector<sample*> &sampleX,std::vector<sample*> &sampleY);
 
 /**
 	@brief Funzione buildR
 
-	Funzione buildR (con codice in parallelo)
+	Funzione buildR
 
-	@param sampleX Vector di samples
-	@param sampleY Vector di samples
+	@param sampleX Vector di puntatori a sample
+	@param sampleY Vector di puntatori a sample
 
 	@return Mappa <int,vector<double>>
 **/
-std::map<int,std::vector<double>> buildR(std::vector<sample> &sampleX,std::vector<sample> &sampleY);
+std::map<int,std::vector<double>> buildR(std::vector<sample*> &sampleX,std::vector<sample*> &sampleY);
 
 /**
 	@brief Funzione calcUpdateR
@@ -161,40 +161,38 @@ std::map<int,std::vector<double>> buildR(std::vector<sample> &sampleX,std::vecto
 	Funzione calcUpdateR
 
 	@param currentR Vector di double
-	@param s Sample
+	@param s Puntatore a sample
 	@param sIndex Valore intero
-	@param sampleX Vector di samples
-	@param sampleY Vector di samples
+	@param sampleX Vector di puntatori a sample
+	@param sampleY Vector di puntatori a sample
 
 	@return Puntatore a resCalcR
 **/
-resCalcR* calcUpdateR(std::vector<double> &currentR,sample &s,int &sIndex,std::vector<sample> &sampleX,std::vector<sample> &sampleY);
+resCalcR* calcUpdateR(std::vector<double> &currentR,sample* s,int &sIndex,std::vector<sample*> &sampleX,std::vector<sample*> &sampleY);
 
 /**
 	@brief Funzione updateR
 
-	Funzione updateR (con codice in parallelo)
+	Funzione updateR
 
-	@param sampleX Vector di samples
-	@param sampleY Vector di samples
+	@param sampleX Vector di puntatori a sample
+	@param sampleY Vector di puntatori a sample
 	@param RHNx Mappa <int,vector<double>>
 	@param RHNy Mappa <int,vector<double>>
 
 	@return Mappa <int,vector<double>>
 **/
-std::map<int,std::vector<double>> updateR(std::vector<sample> &sampleX,std::vector<sample> &sampleY,std::map<int,std::vector<double>> &RHNx,std::map<int,std::vector<double>> &RHNy);
+std::map<int,std::vector<double>> updateR(std::vector<sample*> &sampleX,std::vector<sample*> &sampleY,std::map<int,std::vector<double>> &RHNx,std::map<int,std::vector<double>> &RHNy);
 
 /**
 	@brief Funzione computeTestStat
 
-	Funzione computeTestStat (con codice in parallelo)
-
-	@param sampleX Vector di samples
-	@param sampleY Vector di samples
+	@param sampleX Vector di puntatori a sample
+	@param sampleY Vector di puntatori a sample
 	@param RHN Mappa <int,vector<double>>
 
 	@return Valore double
 **/
-double computeTestStat(std::vector<sample> &sampleX,std::vector<sample> &sampleY,std::map<int,std::vector<double>> &RHN);
+double computeTestStat(std::vector<sample*> &sampleX,std::vector<sample*> &sampleY,std::map<int,std::vector<double>> &RHN);
 
 #endif

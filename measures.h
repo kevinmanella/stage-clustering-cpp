@@ -200,7 +200,7 @@ retScore* avgGenes(cluster* c1,cluster* c2,int &ci,int &cj);
 /**
 	@brief Funzione intraSimilarity
 
-	intraSimilarity
+	Funzione intraSimilarity
 
 	@param c Puntatore a cluster
 	@param sim Funzione di similarità
@@ -212,7 +212,7 @@ std::tuple<double,std::multimap<double,int>> intraSimilarity(cluster* c,similari
 /**
 	@brief Funzione intraDistance
 
-	intraDistance
+	Funzione intraDistance
 
 	@param c Puntatore a cluster
 
@@ -225,12 +225,12 @@ std::tuple<double,std::multimap<double,int>> intraDistance(cluster* c);
 
 	Crea un nuovo cluster
 
-	@param cells Vector di samples
+	@param cells Vector di puntatori a sample
 	@param indices Vector di interi (indici dei samples da inserire nel cluster)
 
 	@return Puntatore a cluster
 **/
-cluster* newCluster(std::vector<sample> &cells,std::vector<int> &indices);
+cluster* newCluster(std::vector<sample*> &cells,std::vector<int> &indices);
 
 /**
 	@brief Funzione splitCluster
@@ -238,13 +238,13 @@ cluster* newCluster(std::vector<sample> &cells,std::vector<int> &indices);
 	Splitta un cluster in due nuovi cluster
 
 	@param c Puntatore a cluster
-	@param cells Vector di samples
+	@param cells Vector di puntatori a sample
 	@param ix Vector di interi (indici dei samples da inserire nel primo cluster "figlio")
-	@param jx Vector di interi (indice dei samples da inserire nel secondo cluster "figlio")
+	@param jx Vector di interi (indici dei samples da inserire nel secondo cluster "figlio")
 
 	@return 2 puntatori a cluster
 **/
-std::tuple<cluster*,cluster*> splitCluster(cluster* c,std::vector<sample> &cells,std::vector<int> &ix,std::vector<int> &jx);
+std::tuple<cluster*,cluster*> splitCluster(cluster* c,std::vector<sample*> &cells,std::vector<int> &ix,std::vector<int> &jx);
 
 /**
 	@brief Funzione fuseCluster
@@ -253,12 +253,12 @@ std::tuple<cluster*,cluster*> splitCluster(cluster* c,std::vector<sample> &cells
 
 	@param c1 Puntatore a cluster
 	@param c2 Puntatore a cluster
-	@param cells Vector di samples
+	@param cells Vector di puntatori a sample
 	@param rhn Mappa <int,vector<double>> (RHN del nuovo cluster)
 	@param tm Valore double (TM del nuovo cluster)
 
 	@return Puntatore a cluster
 **/
-cluster* fuseCluster(cluster* c1,cluster* c2,std::vector<sample> &cells,std::map<int,std::vector<double>> &rhn,double &tm);
+cluster* fuseCluster(cluster* c1,cluster* c2,std::vector<sample*> &cells,std::map<int,std::vector<double>> &rhn,double &tm);
 
 #endif
