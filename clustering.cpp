@@ -1,6 +1,6 @@
 #include "clustering.h"
+#include "float.h"
 #include <algorithm>
-#include <tuple>
 
 /**
 	@file clustering.cpp
@@ -248,9 +248,6 @@ std::vector<cluster> NJstep(std::vector<sample*> &cells,std::vector<cluster> &cu
 	std::map<std::string,std::map<std::string,stats>>::iterator ok1;
 	std::map<std::string,stats>::iterator ok2;
 
-	retScore* score=nullptr;
-	std::vector<retScore> scores;
-
 	cluster* c1=nullptr;
 	cluster* c2=nullptr;
 
@@ -258,7 +255,20 @@ std::vector<cluster> NJstep(std::vector<sample*> &cells,std::vector<cluster> &cu
 	double tm;
 	bool memoized=false;
 
-	//#pragma omp parallel for private(c1,c2,rhn,tm)
+	int i=-1;
+	int j=-1;
+	double maxDouble=DBL_MAX;
+	retScore* bestScore=new retScore();
+	bestScore->setI(i);
+	bestScore->setJ(j);
+	bestScore->setScore(maxDouble);
+	std::map<int,std::vector<double>> bestRHN;
+
+	// Parte in parallelo
+	//retScore* score=nullptr;
+	//std::vector<retScore> scores;
+
+	//#pragma omp parallel for private(c1,c2,rhn,tm,splitted,ok,ok1,ok2)
 	for(int i=0;i<currentClust.size();i++)
 		for(int j=i+1;j<currentClust.size();j++)
 		{
@@ -317,17 +327,44 @@ std::vector<cluster> NJstep(std::vector<sample*> &cells,std::vector<cluster> &cu
 					memoize[c2->getId()][c1->getId()]=stat;
 				}
 
-				score=new retScore();
+				if(tm<bestScore->getScore())
+				{
+					bestScore->setI(i);
+					bestScore->setJ(j);
+					bestScore->setScore(tm);
+					bestRHN = rhn;
+				}
+
+				// Parte in parallelo
+				/*score=new retScore();
 				score->setI(i);
 				score->setJ(j);
 				score->setScore(tm);
 				scores.push_back(*score);
 				delete score;
-				score=nullptr;
+				score=nullptr;*/
 			}
 		}
 
-	std::vector<int> used;
+	double bScore=bestScore->getScore();
+	cluster* newcl=fuseCluster(&currentClust[bestScore->getI()],&currentClust[bestScore->getJ()],cells,bestRHN,bScore);
+
+	memoize.erase(currentClust[bestScore->getI()].getId());
+	memoize.erase(currentClust[bestScore->getJ()].getId());
+
+	std::vector<cluster> cls;
+
+	for(int i=0;i<currentClust.size();i++)
+		if (!(i==bestScore->getI() || i==bestScore->getJ()))
+			cls.push_back(currentClust[i]);
+
+	cls.push_back(*newcl);
+	delete bestScore;
+	delete newcl;
+	return cls;
+
+	// Parte in parallelo
+	/*std::vector<int> used;
 	std::vector<int>::iterator okI;
 	std::vector<int>::iterator okJ;
 
@@ -381,7 +418,7 @@ std::vector<cluster> NJstep(std::vector<sample*> &cells,std::vector<cluster> &cu
 		}
 	}
 
-	return cls;
+	return cls;*/
 }
 
 /**

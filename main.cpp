@@ -1,16 +1,25 @@
 #include "importCSV.h"
 #include "clustering.h"
 #include <iostream>
-#include <chrono>
+#include <fstream>
 
 int main()
 {
-	auto start=std::chrono::steady_clock::now();
+	int k;
+	std::cout<<"Insert the number of clusters. It must be greater than 1: ";
+	std::cin>>k;
+	if(k<=1)
+	{
+		std::cout<<"The number of clusters must be greater than 1!"<<std::endl;
+		exit (1);
+	}
 
-	std::string filePath="small.csv";
+	std::string filePath;
+	std::cout<<"Insert the name of the input file: ";
+	std::cin>>filePath;
+
 	double d1=0.02;
 	double d2=100;
-	int k=10;
 
 	std::vector<sample*> s=buildSamplesFromCSV(filePath);
 
@@ -22,21 +31,34 @@ int main()
 
 	std::vector<cluster> c=NJclustering(s,k);
 
-	// Stampa dei cluster (quanti cluster ci sono e samples presenti in ogni cluster)
-	std::cout<<"Size: "<<c.size()<<std::endl;
+	// Stampa dei cluster su console e su file (quanti cluster ci sono e samples presenti in ogni cluster)
+	std::ofstream outFile;
+	outFile.open("output.txt");
 
-	for(std::vector<cluster>::iterator it=c.begin();it!=c.end();it++)
-		std::cout<<it->string()<<std::endl;
+	if(!outFile)
+	{
+		std::cout<<"Non è possibile aprire il file in scrittura"<<std::endl;
+		exit(1);
+	}
+
+	std::cout<<std::endl<<"Number of clusters: "<<c.size()<<std::endl;
+	outFile<<"Number of clusters: "<<c.size()<<std::endl;
+
+	for(int i=0;i<c.size();i++)
+	{
+		std::cout<<i<<"      "<<c[i].string()<<std::endl;
+		outFile<<i<<"      "<<c[i].string()<<std::endl;
+	}
+
+	std::cout<<std::endl<<"The results are stored in the file output.txt"<<std::endl;
+
+	outFile.close();
 
 	for(int i=0;i<s.size();i++)
 	{
 		delete s[i];
 		s[i]=nullptr;
 	}
-
-	auto end=std::chrono::steady_clock::now();
-	auto diff=end-start;
-	std::cout<<std::chrono::duration<double,std::milli> (diff).count()<<" ms"<<std::endl;
 
 	return 0;
 }
